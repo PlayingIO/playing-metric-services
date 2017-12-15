@@ -12,7 +12,7 @@ const options = {
 const fields = {
   name: { type: 'String', required: true },   // name for the metric
   description: { type: 'String' },            // brief description of the metric
-  image: contents.blob.schema,                 // image which represents the metric
+  image: contents.blob.schema,                // image which represents the metric
   tags: [{ type: 'String' }],                 // the tags of the metric
 };
 

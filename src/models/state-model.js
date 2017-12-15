@@ -7,7 +7,7 @@ import { models as contents } from 'playing-content-services';
  */
 const fields = {
   constraints: {
-    states: [{                     // an array of individual states in the metric
+    states: [{                           // an array of individual states in the metric
       name: { type: 'String' },          // name of the item
       description: { type: 'String' },   // brief description of the item
       image: contents.blob.schema,       // image that represents the item
