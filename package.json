@@ -1,7 +1,7 @@
 {
-  "name": "playing-metrics-services",
+  "name": "playing-metric-services",
   "version": "1.0.0",
-  "description": "Game metrics management microservices for playful applications",
+  "description": "Game metric management microservices for playful applications",
   "author": "Forafish",
   "license": "MIT",
   "main": "index.js",
