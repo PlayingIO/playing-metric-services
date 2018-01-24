@@ -12,7 +12,7 @@ const fields = {
       name: { type: 'String' },              // name of the item
       description: { type: 'String' },       // brief description of the item
       image: contents.blob.schema,           // image that represents the item
-      max: { type: 'Number' },               // maximum count of the item a player can get
+      maximum: { type: 'Number' },           // maximum count of the item a player can get
       hidden: { type: 'Boolean' },           // whether to show up in player profiles if they are not earned
     }]
   }
