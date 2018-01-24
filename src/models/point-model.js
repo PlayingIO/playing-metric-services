@@ -6,8 +6,8 @@ import { plugins } from 'mostly-feathers-mongoose';
  */
 const fields = {
   constraints: {
-    min: { type: 'Number' },                 // minimum value
-    max: { type: 'Number' },                 // maximum value
+    minimum: { type: 'Number' },             // minimum value
+    maximum: { type: 'Number' },             // maximum value
     default: { type: 'Number', default: 0 }, // default value
   }
 };
