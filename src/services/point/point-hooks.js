@@ -1,5 +1,6 @@
 import { hooks as auth } from 'feathers-authentication';
 import { hooks } from 'mostly-feathers-mongoose';
+import { hooks as content } from 'playing-content-services';
 import PointEntity from '~/entities/point-entity';
 
 module.exports = function(options = {}) {
@@ -10,9 +11,15 @@ module.exports = function(options = {}) {
       ],
       get: [],
       find: [],
-      create: [],
-      update: [],
-      patch: [],
+      create: [
+        content.fetchBlobs({ xpath: 'image' })
+      ],
+      update: [
+        content.fetchBlobs({ xpath: 'image' })
+      ],
+      patch: [
+        content.fetchBlobs({ xpath: 'image' })
+      ],
       remove: [],
     },
     after: {
