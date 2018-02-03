@@ -20,7 +20,7 @@ module.exports = function(options = {}) {
       patch: [
         content.fetchBlobs({ xpath: 'image' })
       ],
-      remove: [],
+      remove: []
     },
     after: {
       all: [

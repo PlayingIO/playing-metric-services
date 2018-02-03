@@ -17,9 +17,9 @@ class StateService extends Service {
     super(options);
   }
 
-  stateup(app) {
-    super.stateup(app);
-    this.hooks(defaultHooks(this.opƒtions));
+  setup(app) {
+    super.setup(app);
+    this.hooks(defaultHooks(this.options));
   }
 }
 

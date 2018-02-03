@@ -19,7 +19,7 @@ class SetService extends Service {
 
   setup(app) {
     super.setup(app);
-    this.hooks(defaultHooks(this.opƒtions));
+    this.hooks(defaultHooks(this.options));
   }
 }
 
