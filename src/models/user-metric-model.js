@@ -6,8 +6,8 @@ import { plugins } from 'mostly-feathers-mongoose';
  */
 const fields = {
   metric: { type: 'ObjectId', required: true }, // metric id
-  name: { type: 'String', required: true },     // metric name (for cache)
-  type: { type: 'String', required: true },     // metric type
+  name: { type: String, required: true },       // metric name (for cache)
+  type: { type: String, required: true },       // metric type
   value: { type: 'Mixed' },                     // metric value
   meta: { type: 'Mixed' },                      // metric meta info
   user: { type: 'ObjectId', required: true }    // user id

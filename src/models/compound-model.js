@@ -6,7 +6,7 @@ import { plugins } from 'mostly-feathers-mongoose';
  */
 const fields = {
   constraints: {
-    formula: { type: 'String' }              // formula which is evaluated to get the metric's value
+    formula: { type: String }              // formula which is evaluated to get the metric's value
   }
 };
 
