@@ -24,23 +24,54 @@ class MetricService extends Service {
   }
 
   find(params) {
-    let type = params && fp.dotPath('query.type', params);
+    const type = params && fp.dotPath('query.type', params);
     if (fp.is(String, type) && type !== 'metric') {
       return this.app.service(plural(type)).find(params);
     } else {
-      return super.find(params);
+      return super.find(params).then(result => {
+        if (result && result.data && result.data.length > 0) {
+          const metricsByType = fp.groupBy(fp.prop('type'), result.data);
+          const findByType = fp.mapObjIndexed((metrics, type) => {
+            if (type === 'metric') {
+              return Promise.resolve(metrics);
+            } else {
+              const paramsIds = fp.assocDotPath('query.id', {
+                $in: fp.map(fp.prop('id'), metrics)
+              }, params);
+              return this.app.service(plural(type)).find(paramsIds);
+            }
+          });
+          const promises = fp.values(findByType(metricsByType));
+          return Promise.all(promises).then(metrics => {
+            result.data = fp.flatten(
+              fp.map(doc => (doc && doc.data) || doc, metrics));
+            const sort = params && fp.dotPath('query.$sort', params) || this.options.sort;
+            if (sort) {
+              result.data = helpers.sortWith(sort, result.data);
+            }
+            return result;
+          });
+        } else {
+          return result;
+        }
+      });
     }
   }
 
   get(id, params) {
-    return super.get(id, params).then(metric => {
-      if (metric && metric.type && metric.type !== 'metric') {
-        let service = plural(metric.type || 'metric');
-        return this.app.service(service).get(metric.id, params);
-      } else {
-        return metric;
-      }
-    });
+    const type = fp.dotPath('query.type', params);
+    if (fp.is(String, type) && type !== 'metric') {
+      return this.app.service(plural(type)).get(params);
+    } else {
+      return super.get(id, params).then(metric => {
+        if (metric && metric.type && metric.type !== 'metric') {
+          const service = plural(metric.type || 'metric');
+          return this.app.service(service).get(metric.id, params);
+        } else {
+          return metric;
+        }
+      });
+    }
   }
 
   create(data, params) {
@@ -68,14 +99,15 @@ class MetricService extends Service {
   }
 
   remove(id, params) {
-    let type = params && fp.dotPath('query.type', params);
+    const type = params && fp.dotPath('query.type', params);
     if (fp.is(String, type) && type !== 'metric') {
       return this.app.service(plural(type)).remove(id, params);
     } else {
-      if (params && params.query.more) {
-        let more = [id].concat(params.query.more.split(','));
+      const more = params && fp.dotPath('query.more', params);
+      if (more) {
+        const moreIds = [id].concat(more.split(','));
         delete params.query.more;
-        return Promise.all(more.map(id => super.remove(id, params)));
+        return Promise.all(moreIds.map(id => super.remove(id, params)));
       } else {
         return super.remove(id, params);
       }
