@@ -24,8 +24,9 @@ class MetricService extends Service {
   }
 
   find(params) {
-    if (typeof params.query.type === 'string' && params.query.type !== 'metric') {
-      return this.app.service(plural(params.query.type)).find(params);
+    let type = params && fp.dotPath('query.type', params);
+    if (fp.is(String, type) && type !== 'metric') {
+      return this.app.service(plural(type)).find(params);
     } else {
       return super.find(params);
     }
@@ -67,8 +68,9 @@ class MetricService extends Service {
   }
 
   remove(id, params) {
-    if (params.query.type && params.query.type !== 'metric') {
-      return this.app.service(plural(params.query.type)).remove(id, params);
+    let type = params && fp.dotPath('query.type', params);
+    if (fp.is(String, type) && type !== 'metric') {
+      return this.app.service(plural(type)).remove(id, params);
     } else {
       if (params && params.query.more) {
         let more = [id].concat(params.query.more.split(','));
