@@ -78,6 +78,7 @@ class UserMetricService extends Service {
       if (metric.type === 'set') assert(data.item, 'data.item not provided for set metric'); 
       data.type = metric.type;
       data.name = metric.name;
+      userMetric = userMetric || { metric: metric.id, type: metric.type };
       data.value = calculateMetricValue(userMetric, data.verb, data.value, data.item, data.chance, data.variables);
       return super._upsert(null, data, { query: {
         metric: data.metric,
