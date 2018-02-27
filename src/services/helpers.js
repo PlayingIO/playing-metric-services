@@ -9,8 +9,17 @@ export const evalFomulaValue = (metric, value, variables) => {
   }
 };
 
-export const calculateMetricValue = (metric, verb, value, item, variables) => {
+export const probability = (chance, value) => {
+  const random = Math.random();
+  if (random < chance / 100) {
+    return Math.ceil(value * (0.75 + (1 - random) / 2));
+  }
+  return 0;
+};
+
+export const calculateMetricValue = (metric, verb, value, item, chance, variables) => {
   value = evalFomulaValue(metric, value, variables);
+  value = probability(chance || 100, value);
   switch(metric.type) {
     case 'point': {
       metric.value = metric.value || 0;
