@@ -12,9 +12,14 @@ export const evalFomulaValue = (metric, value, variables) => {
 export const probability = (chance, value) => {
   const random = Math.random();
   if (random < chance / 100) {
-    return Math.ceil(value * (0.75 + (1 - random) / 2));
+    if (fp.is(Number, value)) {
+      return Math.ceil(value * (0.75 + (1 - random) / 2));
+    } else {
+      return value;
+    }
+  } else {
+    return fp.is(Number, value)? 0 : null;
   }
-  return 0;
 };
 
 export const calculateMetricValue = (metric, verb, value, item, chance, variables) => {
@@ -49,7 +54,7 @@ export const calculateMetricValue = (metric, verb, value, item, chance, variable
       break;
     }
     case 'state': {
-      return value;
+      return value? value : metric.value; // chance
     }
   }
 };
@@ -58,7 +63,7 @@ export const updateCompoundMetrics = (userMetrics) => {
   // TODO update compound metric value formula
   const userCompounds = fp.filter(fp.propEq('type', 'compound'), userMetrics);
   return userCompounds.map(metric => {
-    metric.value = evalFomulaValue(metric.value);
+    metric.value = evalFomulaValue(metric, metric.value);
     return metric;
   });
 };
