@@ -5,7 +5,7 @@ import fp from 'mostly-func';
 import { plural } from 'pluralize';
 import UserMetricModel from '~/models/user-metric-model';
 import defaultHooks from './user-metric-hooks';
-import { calculateMetricValue, updateCompoundMetrics } from '../helpers';
+import { calculateMetricValue, updateCompoundMetrics } from '../../helpers';
 const debug = makeDebug('playing:user-metrics-services:user-metrics');
 
 const defaultOptions = {
