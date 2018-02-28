@@ -3,7 +3,7 @@ import makeDebug from 'debug';
 
 const debug = makeDebug('playing:user-metric-services:helpers');
 
-export const evalFomulaValue = (metric, value, variables) => {
+export const evalFormulaValue = (metric, value, variables) => {
   // TODO evaluate value formula
   switch(metric.type) {
     case 'point': return parseInt(value);
@@ -26,7 +26,7 @@ export const probability = (chance, value) => {
 };
 
 export const calculateMetricValue = (metric, verb, value, item, chance, variables) => {
-  value = evalFomulaValue(metric, value, variables);
+  value = evalFormulaValue(metric, value, variables);
   value = probability(chance || 100, value);
   switch(metric.type) {
     case 'point':
@@ -66,7 +66,7 @@ export const updateCompoundMetrics = (userMetrics) => {
   // TODO update compound metric value formula
   const userCompounds = fp.filter(fp.propEq('type', 'compound'), userMetrics);
   return userCompounds.map(metric => {
-    metric.value = evalFomulaValue(metric, metric.value);
+    metric.value = evalFormulaValue(metric, metric.value);
     return metric;
   });
 };
