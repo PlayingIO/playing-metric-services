@@ -1,4 +1,7 @@
 import fp from 'mostly-func';
+import makeDebug from 'debug';
+
+const debug = makeDebug('playing:user-metric-services:helpers');
 
 export const evalFomulaValue = (metric, value, variables) => {
   // TODO evaluate value formula
@@ -26,36 +29,36 @@ export const calculateMetricValue = (metric, verb, value, item, chance, variable
   value = evalFomulaValue(metric, value, variables);
   value = probability(chance || 100, value);
   switch(metric.type) {
-    case 'point': {
+    case 'point':
       metric.value = metric.value || 0;
       switch(verb) {
         case 'add': return metric.value + value;
         case 'remove': return Math.max(0, metric.value - value);
         case 'set': return value;
+        default:
+          console.warn('calculateMetricValue with verb not supported', verb);
       }
       break;
-    }
-    case 'set': {
+    case 'set':
       metric.value = metric.value || {};
       switch(verb) {
-        case 'add': {
+        case 'add':
           metric.value[item] = (metric.value[item] || 0) + value;
           return metric.value;
-        }
-        case 'remove': {
+        case 'remove':
           metric.value[item] = (metric.value[item] || 0) - value;
           return metric.value;
-        }
-        case 'set': {
+        case 'set':
           metric.value[item] = value;
           return metric.value;
-        }
+        default:
+          console.warn('calculateMetricValue with verb not supported', verb);
       }
       break;
-    }
-    case 'state': {
+    case 'state':
       return value? value : metric.value; // chance
-    }
+    default:
+      console.warn('calculateMetricValue with metric type not supported', metric.type);
   }
 };
 
