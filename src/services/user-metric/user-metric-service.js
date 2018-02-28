@@ -79,6 +79,7 @@ class UserMetricService extends Service {
       data.type = metric.type;
       data.name = metric.name;
       userMetric = userMetric || { metric: metric.id, type: metric.type };
+      // TODO FIX if create is called in in parallel, value will be overwrited each other
       data.value = calculateMetricValue(userMetric, data.verb, data.value, data.item, data.chance, data.variables);
       return super._upsert(null, data, { query: {
         metric: data.metric,
