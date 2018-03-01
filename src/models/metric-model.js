@@ -1,9 +1,9 @@
-import timestamps from 'mongoose-timestamp';
 import { plugins } from 'mostly-feathers-mongoose';
 import { models as contents } from 'playing-content-services';
 
 const options = {
-  discriminatorKey: 'type'
+  discriminatorKey: 'type',
+  timestamps: true
 };
 
 /*
@@ -19,7 +19,6 @@ const fields = {
 export default function model (app, name) {
   const mongoose = app.get('mongoose');
   const schema = new mongoose.Schema(fields, options);
-  schema.plugin(timestamps);
   schema.plugin(plugins.softDelete);
   return mongoose.model(name, schema);
 }
