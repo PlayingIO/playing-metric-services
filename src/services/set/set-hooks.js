@@ -15,10 +15,12 @@ module.exports = function(options = {}) {
         content.fetchBlobs({ xpath: 'image' })
       ],
       update: [
-        content.fetchBlobs({ xpath: 'image' })
+        content.fetchBlobs({ xpath: 'image' }),
+        hooks.discardFields('id', 'createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
-        content.fetchBlobs({ xpath: 'image' })
+        content.fetchBlobs({ xpath: 'image' }),
+        hooks.discardFields('id', 'createdAt', 'updatedAt', 'destroyedAt')
       ],
       remove: []
     },
