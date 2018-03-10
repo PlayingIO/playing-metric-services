@@ -1,6 +1,6 @@
 import assert from 'assert';
 import makeDebug from 'debug';
-import { Service, helpers, createService } from 'mostly-feathers-mongoose';
+import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import { plural } from 'pluralize';
 import UserMetricModel from '~/models/user-metric-model';
@@ -25,7 +25,7 @@ class UserMetricService extends Service {
 
   /**
    * find user metrics of current user
-   * @param {*} params 
+   * @param {*} params
    */
   find(params) {
     params = Object.assign({ query: {} }, params);

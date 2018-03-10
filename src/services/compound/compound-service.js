@@ -1,6 +1,6 @@
 import assert from 'assert';
 import makeDebug from 'debug';
-import { Service, helpers, createService } from 'mostly-feathers-mongoose';
+import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import CompoundModel from '~/models/compound-model';
 import defaultHooks from './compound-hooks';
