@@ -75,7 +75,7 @@ class UserMetricService extends Service {
       getUserMetric()
     ]).then(([metric, userMetric]) => {
       assert(metric, 'data.metric not exists');
-      if (metric.type === 'set') assert(data.item, 'data.item not provided for set metric'); 
+      if (metric.type === 'set') assert(data.item, 'data.item not provided for set metric');
       data.type = metric.type;
       data.name = metric.name;
       userMetric = userMetric || { metric: metric.id, type: metric.type };

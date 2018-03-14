@@ -1,4 +1,3 @@
-import { hooks as auth } from 'feathers-authentication';
 import { hooks } from 'mostly-feathers-mongoose';
 import { hooks as content } from 'playing-content-services';
 import MetricEntity from '~/entities/metric-entity';
@@ -7,7 +6,7 @@ module.exports = function(options = {}) {
   return {
     before: {
       all: [
-        auth.authenticate('jwt')
+        hooks.authenticate('jwt', options)
       ],
       get: [],
       find: [],
