@@ -1,4 +1,5 @@
 import { hooks } from 'mostly-feathers-mongoose';
+import { cache } from 'mostly-feathers-cache';
 import { hooks as content } from 'playing-content-services';
 import SetEntity from '~/entities/set-entity';
 
@@ -6,7 +7,8 @@ module.exports = function(options = {}) {
   return {
     before: {
       all: [
-        hooks.authenticate('jwt', options.auth)
+        hooks.authenticate('jwt', options.auth),
+        cache(options.cache)
       ],
       get: [],
       find: [],
@@ -25,6 +27,7 @@ module.exports = function(options = {}) {
     },
     after: {
       all: [
+        cache(options.cache),
         hooks.presentEntity(SetEntity, options),
         hooks.responder()
       ]
