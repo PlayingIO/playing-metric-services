@@ -3,8 +3,9 @@ import makeDebug from 'debug';
 import { Service, helpers, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import { plural } from 'pluralize';
-import MetricModel from '~/models/metric-model';
-import defaultHooks from './metric-hooks';
+
+import MetricModel from '~/models/metric.model';
+import defaultHooks from './metric.hooks';
 
 const debug = makeDebug('playing:metrics-services:metrics');
 
@@ -46,7 +47,7 @@ class MetricService extends Service {
   }
 
   create(data, params = {}) {
-    if (data.type && fp.is(String, type)) {
+    if (data.type && fp.is(String, data.type)) {
       return this.app.service(plural(data.type)).create(data, params);
     } else {
       return super.create(data, params);
@@ -54,7 +55,7 @@ class MetricService extends Service {
   }
 
   update(id, data, params = {}) {
-    if (data.type && fp.is(String, type)) {
+    if (data.type && fp.is(String, data.type)) {
       return this.app.service(plural(data.type)).update(id, data, params);
     } else {
       return super.update(id, data, params);
@@ -62,7 +63,7 @@ class MetricService extends Service {
   }
 
   patch(id, data, params = {}) {
-    if (data.type && fp.is(String, type)) {
+    if (data.type && fp.is(String, data.type)) {
       return this.app.service(plural(data.type)).patch(id, data, params);
     } else {
       return super.patch(id, data, params);

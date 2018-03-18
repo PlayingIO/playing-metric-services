@@ -1,7 +1,8 @@
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 import { hooks as content } from 'playing-content-services';
-import MetricEntity from '~/entities/metric-entity';
+
+import MetricEntity from '~/entities/metric.entity';
 
 module.exports = function(options = {}) {
   return {

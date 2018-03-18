@@ -1,7 +1,8 @@
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
 import { hooks as content } from 'playing-content-services';
-import SetEntity from '~/entities/set-entity';
+
+import PointEntity from '~/entities/point.entity';
 
 module.exports = function(options = {}) {
   return {
@@ -28,7 +29,7 @@ module.exports = function(options = {}) {
     after: {
       all: [
         cache(options.cache),
-        hooks.presentEntity(SetEntity, options),
+        hooks.presentEntity(PointEntity, options),
         hooks.responder()
       ]
     }

@@ -2,16 +2,17 @@ import assert from 'assert';
 import makeDebug from 'debug';
 import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
-import PointModel from '~/models/point-model';
-import defaultHooks from './point-hooks';
 
-const debug = makeDebug('playing:metrics-services:points');
+import CompoundModel from '~/models/compound.model';
+import defaultHooks from './compound.hooks';
+
+const debug = makeDebug('playing:metrics-services:compounds');
 
 const defaultOptions = {
-  name: 'points'
+  name: 'compounds'
 };
 
-class PointService extends Service {
+class CompoundService extends Service {
   constructor(options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
@@ -24,8 +25,8 @@ class PointService extends Service {
 }
 
 export default function init(app, options, hooks) {
-  options = Object.assign({ ModelName: 'point' }, options);
-  return createService(app, PointService, PointModel, options);
+  options = Object.assign({ ModelName: 'compound' }, options);
+  return createService(app, CompoundService, CompoundModel, options);
 }
 
-init.Service = PointService;
+init.Service = CompoundService;

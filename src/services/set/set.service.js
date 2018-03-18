@@ -2,8 +2,9 @@ import assert from 'assert';
 import makeDebug from 'debug';
 import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
-import SetModel from '~/models/set-model';
-import defaultHooks from './set-hooks';
+
+import SetModel from '~/models/set.model';
+import defaultHooks from './set.hooks';
 
 const debug = makeDebug('playing:metrics-services:sets');
 

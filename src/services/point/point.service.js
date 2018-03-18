@@ -2,16 +2,17 @@ import assert from 'assert';
 import makeDebug from 'debug';
 import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
-import StateModel from '~/models/state-model';
-import defaultHooks from './state-hooks';
 
-const debug = makeDebug('playing:metrics-services:states');
+import PointModel from '~/models/point.model';
+import defaultHooks from './point.hooks';
+
+const debug = makeDebug('playing:metrics-services:points');
 
 const defaultOptions = {
-  name: 'states'
+  name: 'points'
 };
 
-class StateService extends Service {
+class PointService extends Service {
   constructor(options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
@@ -24,8 +25,8 @@ class StateService extends Service {
 }
 
 export default function init(app, options, hooks) {
-  options = Object.assign({ ModelName: 'state' }, options);
-  return createService(app, StateService, StateModel, options);
+  options = Object.assign({ ModelName: 'point' }, options);
+  return createService(app, PointService, PointModel, options);
 }
 
-init.Service = StateService;
+init.Service = PointService;
