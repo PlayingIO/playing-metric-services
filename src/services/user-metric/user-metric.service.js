@@ -29,7 +29,7 @@ class UserMetricService extends Service {
    * find user metrics of current user
    * @param {*} params
    */
-  find(params) {
+  async find(params) {
     params = Object.assign({ query: {} }, params);
     assert(params.query.user, 'params.query.user not provided');
     return super.find(params);
@@ -38,7 +38,7 @@ class UserMetricService extends Service {
   /**
    * get user metrics by action id
    */
-  get (id, params) {
+  async get (id, params) {
     let action = null;
     [id, action] = this._idOrAction(id, params);
     if (action) {
@@ -51,7 +51,7 @@ class UserMetricService extends Service {
     return this._first(null, null, params);
   }
 
-  create (data, params) {
+  async create (data, params) {
     assert(data.metric, 'data.metric not provided.');
     assert(data.user, 'data.user not provided.');
     assert(data.verb, 'data.verb not provided.');
@@ -60,11 +60,8 @@ class UserMetricService extends Service {
 
     const svcMetrics = this.app.service(plural(data.type || 'metric'));
 
-    const getMetric = () => svcMetrics.get(data.metric);
-    const getUserMetric = () => this._first({ query: {
-      metric: data.metric, user: data.user
-    }});
-    const getUserMetrics = () => super.find({
+    const getMetric = (id) => svcMetrics.get(id);
+    const getUserMetrics = (user) => super.find({
       query: { user: data.user },
       paginate: false
     });
@@ -72,34 +69,29 @@ class UserMetricService extends Service {
       return super.patch(userMetric.id, userMetric);
     });
 
-    return Promise.all([
-      getMetric(),
-      getUserMetric()
-    ]).then(([metric, userMetric]) => {
-      assert(metric, 'data.metric not exists');
-      if (metric.type === 'set') assert(data.item, 'data.item not provided for set metric');
-      userMetric = userMetric || { metric: metric.id, type: metric.type };
+    const metric = await getMetric(data.metric);
+    assert(metric, 'data.metric is not exists');
+    if (metric.type === 'set') assert(data.item, 'data.item not provided for set metric');
 
-      let update = updateUserMetricValue(userMetric, data.verb, data.value, data.item, data.chance, data.variables);
-      update = fp.merge(update, fp.pick(['metric', 'user', 'name', 'type', 'meta'], data));
+    // value of the user metric
+    let update = updateUserMetricValue(metric.type, data.verb, data.value, data.item, data.chance, data.variables);
+    update = fp.merge(update, fp.pick(['metric', 'user', 'name', 'type', 'meta'], data));
 
-      return super._upsert(null, update, { query: {
-        metric: data.metric,
-        user: data.user
-      }}).then(result => {
-        // get user metrics for update compound metrics
-        return getUserMetrics().then(userMetrics => {
-          const userCompounds = updateCompoundMetrics(userMetrics);
-          if (userCompounds.length > 0) {
-            return Promise.all(udpateUserMetrics(userCompounds)).then(results => {
-              return fp.concat([result], results || []);
-            });
-          } else {
-            return result;
-          }
-        });
-      });
-    });
+    // upsert the user metric
+    const result = await super._upsert(null, update, { query: {
+      metric: data.metric,
+      user: data.user
+    }});
+
+    // get user metrics for updating all compound metrics
+    const userMetrics = await getUserMetrics();
+    const userCompounds = updateCompoundMetrics(userMetrics);
+    if (userCompounds.length > 0) {
+      const results = await Promise.all(udpateUserMetrics(userCompounds));
+      return fp.concat([result], results || []);
+    } else {
+      return result;
+    }
   }
 }
 

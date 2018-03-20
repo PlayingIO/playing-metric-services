@@ -34,10 +34,10 @@ export const probability = (chance, value) => {
 };
 
 // use field operator to update user's metrics value atomically
-export const updateUserMetricValue = (metric, verb, value, item, chance, variables) => {
-  value = evalFormulaValue(metric, value, variables);
+export const updateUserMetricValue = (metricType, verb, value, item, chance, variables) => {
+  value = evalFormulaValue(metricType, value, variables);
   value = probability(chance || 100, value);
-  switch(metric.type) {
+  switch(metricType) {
     case 'point':
       value = parseInt(value);
       switch(verb) {
@@ -59,9 +59,9 @@ export const updateUserMetricValue = (metric, verb, value, item, chance, variabl
       }
       break;
     case 'state':
-      return { $set: { value: value || metric.value } }; // chance
+      return value? { $set: { value } } : {}; // chance
     default:
-      console.warn('updateUserMetricValue with metric type not supported', metric.type);
+      console.warn('updateUserMetricValue with metric type not supported', metricType.type);
   }
 };
 
