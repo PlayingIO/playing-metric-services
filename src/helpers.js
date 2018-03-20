@@ -68,11 +68,12 @@ export const updateUserMetricValue = (metricType, verb, value, item, chance, var
   }
 };
 
-export const updateCompoundMetrics = (userMetrics) => {
-  // TODO update compound metric value formula
-  const userCompounds = fp.filter(fp.propEq('type', 'compound'), userMetrics);
+export const updateCompoundValues = (userCompounds, userScores) => {
+  const variables = fp.reduce((acc, score) => {
+    return fp.assoc(score.name, score.value, acc);
+  }, {}, userScores);
   return userCompounds.map(metric => {
-    metric.value = evalFormulaValue(metric, metric.value);
+    metric.value = evalFormulaValue(metric, metric.formula, variables);
     return metric;
   });
 };
