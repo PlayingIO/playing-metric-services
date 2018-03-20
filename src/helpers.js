@@ -70,7 +70,12 @@ export const updateUserMetricValue = (metricType, verb, value, item, chance, var
 
 export const updateCompoundValues = (userCompounds, userScores) => {
   const variables = fp.reduce((acc, score) => {
-    return fp.assoc(score.name, score.value, acc);
+    if (score.type === 'set') {
+      return fp.reduce((acc2, key) =>
+        fp.assoc(`${score.name}.${key}`, score.value[key], acc2), acc, fp.keys(score.value));
+    } else {
+      return fp.assoc(score.name, score.value, acc);
+    }
   }, {}, userScores);
   return userCompounds.map(metric => {
     metric.value = evalFormulaValue(metric, metric.formula, variables);
