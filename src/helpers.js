@@ -1,6 +1,7 @@
 import makeDebug from 'debug';
 import { helpers } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
+import nerdamer from 'nerdamer';
 
 const debug = makeDebug('playing:user-metric-services:helpers');
 
@@ -13,10 +14,16 @@ export const evalFormulaValue = (metric, value, variables) => {
   }
 };
 
+// a simple policy to get variable output of a value at a chance
 export const probability = (chance, value) => {
+  if (chance >= 100) return value;
+
   const random = Math.random();
+  // chance to hit or miss
   if (random < chance / 100) {
+    // variable output if it is a number
     if (fp.is(Number, value)) {
+      // value range [0.75 ~ 1.25], lower chance, possible bigger outoput
       return Math.ceil(value * (0.75 + (1 - random) / 2));
     } else {
       return value;
@@ -26,40 +33,35 @@ export const probability = (chance, value) => {
   }
 };
 
-export const calculateMetricValue = (metric, verb, value, item, chance, variables) => {
+// use field operator to update user's metrics value atomically
+export const updateUserMetricValue = (metric, verb, value, item, chance, variables) => {
   value = evalFormulaValue(metric, value, variables);
   value = probability(chance || 100, value);
   switch(metric.type) {
     case 'point':
-      metric.value = metric.value || 0;
+      value = parseInt(value);
       switch(verb) {
-        case 'add': return metric.value + value;
-        case 'remove': return Math.max(0, metric.value - value);
-        case 'set': return value;
+        case 'add': return { $inc: { 'value': value } };
+        case 'remove': return { $inc: { 'value': - value } };
+        case 'set': return { $set: { 'value': value } };
         default:
-          console.warn('calculateMetricValue with verb not supported', verb);
+          console.warn('updateUserMetricValue with verb not supported', verb);
       }
       break;
     case 'set':
-      metric.value = metric.value || {};
+      value = parseInt(value);
       switch(verb) {
-        case 'add':
-          metric.value[item] = (metric.value[item] || 0) + value;
-          return metric.value;
-        case 'remove':
-          metric.value[item] = (metric.value[item] || 0) - value;
-          return metric.value;
-        case 'set':
-          metric.value[item] = value;
-          return metric.value;
+        case 'add': return { $inc: { [`value.${item}`]: value } };
+        case 'remove': return { $inc: { [`value.${item}`]: - value } };
+        case 'set': return { $set: { [`value.${item}`]: value } };
         default:
-          console.warn('calculateMetricValue with verb not supported', verb);
+          console.warn('updateUserMetricValue with verb not supported', verb);
       }
       break;
     case 'state':
-      return value? value : metric.value; // chance
+      return { $set: { value: value || metric.value } }; // chance
     default:
-      console.warn('calculateMetricValue with metric type not supported', metric.type);
+      console.warn('updateUserMetricValue with metric type not supported', metric.type);
   }
 };
 

@@ -6,7 +6,7 @@ import { plural } from 'pluralize';
 
 import UserMetricModel from '~/models/user-metric.model';
 import defaultHooks from './user-metric.hooks';
-import { calculateMetricValue, updateCompoundMetrics } from '../../helpers';
+import { updateUserMetricValue, updateCompoundMetrics } from '../../helpers';
 
 const debug = makeDebug('playing:user-metrics-services:user-metrics');
 
@@ -78,12 +78,12 @@ class UserMetricService extends Service {
     ]).then(([metric, userMetric]) => {
       assert(metric, 'data.metric not exists');
       if (metric.type === 'set') assert(data.item, 'data.item not provided for set metric');
-      data.type = metric.type;
-      data.name = metric.name;
       userMetric = userMetric || { metric: metric.id, type: metric.type };
-      // TODO FIX if create is called in in parallel, value will be overwrited each other
-      data.value = calculateMetricValue(userMetric, data.verb, data.value, data.item, data.chance, data.variables);
-      return super._upsert(null, data, { query: {
+
+      let update = updateUserMetricValue(userMetric, data.verb, data.value, data.item, data.chance, data.variables);
+      update = fp.merge(update, fp.pick(['metric', 'user', 'name', 'type', 'meta'], data));
+
+      return super._upsert(null, update, { query: {
         metric: data.metric,
         user: data.user
       }}).then(result => {
