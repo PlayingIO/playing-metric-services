@@ -66,8 +66,11 @@ class UserMetricService extends Service {
       query: { user: data.user },
       paginate: false
     });
-    const udpateUserMetrics = fp.map(userMetric => {
-      return super.patch(userMetric.id, userMetric);
+    const upsertUserMetrics = fp.map(metric => {
+      return super._upsert(metric.id, metric, { query: {
+        metric: metric.metric,
+        user: data.user
+      }});
     });
 
     const metric = await getMetric(data.metric);
@@ -79,17 +82,14 @@ class UserMetricService extends Service {
     update = fp.merge(update, fp.pick(['metric', 'user', 'name', 'type', 'meta'], data));
 
     // upsert the user metric
-    const result = await super._upsert(null, update, { query: {
-      metric: data.metric,
-      user: data.user
-    }});
+    const result = await upsertUserMetrics([update]);
 
     // get user metrics for updating all compound metrics
     const userMetrics = await getUserMetrics();
     const userCompounds = updateCompoundMetrics(userMetrics);
     if (userCompounds.length > 0) {
-      const results = await Promise.all(udpateUserMetrics(userCompounds));
-      return fp.concat([result], results || []);
+      const results = await Promise.all(upsertUserMetrics(userCompounds));
+      return fp.concat(result, results || []);
     } else {
       return result;
     }
