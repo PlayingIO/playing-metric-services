@@ -1,5 +1,6 @@
-import fp from 'mostly-func';
 import makeDebug from 'debug';
+import { helpers } from 'mostly-feathers-mongoose';
+import fp from 'mostly-func';
 
 const debug = makeDebug('playing:user-metric-services:helpers');
 
@@ -69,4 +70,20 @@ export const updateCompoundMetrics = (userMetrics) => {
     metric.value = evalFormulaValue(metric, metric.value);
     return metric;
   });
+};
+
+export const createUserMetrics = (app) => {
+  const svcUserMetrics = app.service('user-metrics');
+  return async (user, rewards) => {
+    const create = fp.reduce((arr, reward) => {
+      if (reward.metric) {
+        reward.metric = helpers.getId(reward.metric);
+        reward.user = user;
+        return arr.concat(svcUserMetrics.create(reward));
+      }
+      return arr;
+    }, []);
+    const metrics = await Promise.all(create(rewards));
+    return fp.flatten(metrics);
+  };
 };
