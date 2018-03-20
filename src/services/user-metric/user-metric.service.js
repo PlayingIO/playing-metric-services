@@ -84,7 +84,7 @@ class UserMetricService extends Service {
     update = fp.merge(update, fp.pick(['metric', 'user', 'name', 'type', 'meta'], data));
 
     // upsert the user metric
-    const result = await upsertUserMetrics([update]);
+    const result = await Promise.all(upsertUserMetrics([update]));
 
     // get user metrics for updating all compound metrics
     const [userScores, compoundMetrics] = await Promise.all([
@@ -104,11 +104,9 @@ class UserMetricService extends Service {
     userCompounds = updateCompoundValues(userCompounds, userScores);
 
     if (userCompounds.length > 0) {
-      const results = await Promise.all(upsertUserMetrics(userCompounds));
-      return fp.concat(result, results || []);
-    } else {
-      return result;
+      await Promise.all(upsertUserMetrics(userCompounds));
     }
+    return result;
   }
 }
 
