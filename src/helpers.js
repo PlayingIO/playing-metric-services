@@ -5,12 +5,15 @@ import nerdamer from 'nerdamer';
 
 const debug = makeDebug('playing:user-metric-services:helpers');
 
-export const evalFormulaValue = (metric, value, variables) => {
-  // TODO evaluate value formula
-  switch(metric.type) {
-    case 'point': return parseInt(value);
-    case 'set': return parseInt(value);
-    default: return value;
+export const evalFormulaValue = (metricType, value, variables) => {
+  const result = nerdamer(value, variables).evaluate();
+  switch (metricType) {
+    case 'point':
+    case 'set':
+    case 'compound':
+      return parseInt(result.text());
+    default:
+      return result.text();
   }
 };
 
@@ -76,11 +79,12 @@ export const updateCompoundMetrics = (userMetrics) => {
 
 export const createUserMetrics = (app) => {
   const svcUserMetrics = app.service('user-metrics');
-  return async (user, rewards) => {
+  return async (user, rewards, variables) => {
     const create = fp.reduce((arr, reward) => {
       if (reward.metric) {
         reward.metric = helpers.getId(reward.metric);
         reward.user = user;
+        reward.variables = variables;
         return arr.concat(svcUserMetrics.create(reward));
       }
       return arr;
