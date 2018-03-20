@@ -57,6 +57,7 @@ class UserMetricService extends Service {
     assert(data.verb, 'data.verb not provided.');
     assert(data.value, 'data.value not provided.');
     data.chance = parseInt(data.chance || 100);
+    data.variables = data.variables || {};
 
     const svcMetrics = this.app.service(plural(data.type || 'metric'));
 
