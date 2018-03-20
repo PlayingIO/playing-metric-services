@@ -6,7 +6,7 @@ import { plural } from 'pluralize';
 
 import UserMetricModel from '~/models/user-metric.model';
 import defaultHooks from './user-metric.hooks';
-import { updateUserMetricValue, updateCompoundMetrics } from '../../helpers';
+import { updateUserMetricValue, updateCompoundValues } from '../../helpers';
 
 const debug = makeDebug('playing:user-metrics-services:user-metrics');
 
@@ -60,8 +60,10 @@ class UserMetricService extends Service {
     data.variables = data.variables || {};
 
     const svcMetrics = this.app.service(plural(data.type || 'metric'));
+    const svcCompounds = this.app.service('compounds');
 
     const getMetric = (id) => svcMetrics.get(id);
+    const getCompoundMetrics = () => svcCompounds.find({ paginate: false });
     const getUserMetrics = (user) => super.find({
       query: { user: data.user },
       paginate: false
@@ -85,8 +87,22 @@ class UserMetricService extends Service {
     const result = await upsertUserMetrics([update]);
 
     // get user metrics for updating all compound metrics
-    const userMetrics = await getUserMetrics();
-    const userCompounds = updateCompoundMetrics(userMetrics);
+    const [userScores, compoundMetrics] = await Promise.all([
+      getUserMetrics(),
+      getCompoundMetrics()
+    ]);
+
+    let userCompounds = fp.map(compound => {
+      return {
+        metric: compound.id,
+        user: data.user,
+        name: compound.name,
+        type: compound.type,
+        formula: compound.constraints && compound.constraints.formula || ''
+      };
+    }, compoundMetrics);
+    userCompounds = updateCompoundValues(userCompounds, userScores);
+
     if (userCompounds.length > 0) {
       const results = await Promise.all(upsertUserMetrics(userCompounds));
       return fp.concat(result, results || []);
