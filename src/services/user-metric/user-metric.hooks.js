@@ -5,7 +5,7 @@ import { cache } from 'mostly-feathers-cache';
 
 import UserMetricEntity from '~/entities/metric.entity';
 
-module.exports = function(options = {}) {
+module.exports = function (options = {}) {
   return {
     before: {
       all: [

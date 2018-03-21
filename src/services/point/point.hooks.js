@@ -4,7 +4,7 @@ import { hooks as content } from 'playing-content-services';
 
 import PointEntity from '~/entities/point.entity';
 
-module.exports = function(options = {}) {
+module.exports = function (options = {}) {
   return {
     before: {
       all: [

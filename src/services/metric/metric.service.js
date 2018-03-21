@@ -14,17 +14,17 @@ const defaultOptions = {
 };
 
 class MetricService extends Service {
-  constructor(options) {
+  constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
   }
 
-  setup(app) {
+  setup (app) {
     super.setup(app);
     this.hooks(defaultHooks(this.options));
   }
 
-  find(params = {}) {
+  find (params = {}) {
     const type = params && fp.dotPath('query.type', params);
     if (fp.is(String, type) && type !== 'metric') {
       return this.app.service(plural(type)).find(params);
@@ -35,7 +35,7 @@ class MetricService extends Service {
     }
   }
 
-  get(id, params = {}) {
+  get (id, params = {}) {
     const type = fp.dotPath('query.type', params);
     if (type && fp.is(String, type)) {
       return this.app.service(plural(type)).get(params);
@@ -46,7 +46,7 @@ class MetricService extends Service {
     }
   }
 
-  create(data, params = {}) {
+  create (data, params = {}) {
     if (data.type && fp.is(String, data.type)) {
       return this.app.service(plural(data.type)).create(data, params);
     } else {
@@ -54,7 +54,7 @@ class MetricService extends Service {
     }
   }
 
-  update(id, data, params = {}) {
+  update (id, data, params = {}) {
     if (data.type && fp.is(String, data.type)) {
       return this.app.service(plural(data.type)).update(id, data, params);
     } else {
@@ -62,7 +62,7 @@ class MetricService extends Service {
     }
   }
 
-  patch(id, data, params = {}) {
+  patch (id, data, params = {}) {
     if (data.type && fp.is(String, data.type)) {
       return this.app.service(plural(data.type)).patch(id, data, params);
     } else {
@@ -70,7 +70,7 @@ class MetricService extends Service {
     }
   }
 
-  remove(id, params = {}) {
+  remove (id, params = {}) {
     const type = fp.dotPath('query.type', params);
     if (type && fp.is(String, type)) {
       return this.app.service(plural(type)).remove(id, params);
@@ -87,7 +87,7 @@ class MetricService extends Service {
   }
 }
 
-export default function init(app, options, hooks) {
+export default function init (app, options, hooks) {
   options = Object.assign({ ModelName: 'metric' }, options);
   return createService(app, MetricService, MetricModel, options);
 }

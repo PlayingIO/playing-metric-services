@@ -15,12 +15,12 @@ const defaultOptions = {
 };
 
 class UserMetricService extends Service {
-  constructor(options) {
+  constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
   }
 
-  setup(app) {
+  setup (app) {
     super.setup(app);
     this.hooks(defaultHooks(this.options));
   }
@@ -29,7 +29,7 @@ class UserMetricService extends Service {
    * find user metrics of current user
    * @param {*} params
    */
-  async find(params) {
+  async find (params) {
     params = Object.assign({ query: {} }, params);
     assert(params.query.user, 'params.query.user not provided');
     return super.find(params);
@@ -110,7 +110,7 @@ class UserMetricService extends Service {
   }
 }
 
-export default function init(app, options, hooks) {
+export default function init (app, options, hooks) {
   options = Object.assign({ ModelName: 'user-metric' }, options);
   return createService(app, UserMetricService, UserMetricModel, options);
 }

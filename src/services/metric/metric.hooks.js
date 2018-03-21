@@ -4,7 +4,7 @@ import { hooks as content } from 'playing-content-services';
 
 import MetricEntity from '~/entities/metric.entity';
 
-module.exports = function(options = {}) {
+module.exports = function (options = {}) {
   return {
     before: {
       all: [
