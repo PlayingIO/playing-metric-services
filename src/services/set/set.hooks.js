@@ -4,7 +4,7 @@ import { hooks as content } from 'playing-content-services';
 
 import SetEntity from '~/entities/set.entity';
 
-module.exports = function (options = {}) {
+export default function (options = {}) {
   return {
     before: {
       all: [
