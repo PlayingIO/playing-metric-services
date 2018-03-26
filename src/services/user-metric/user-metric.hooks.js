@@ -40,7 +40,7 @@ export default function (options = {}) {
         cache(options.cache),
         hooks.populate('metric', { path: '@type' }), // absolute path
         hooks.populate('user', { service: 'users' }),
-        hooks.presentEntity(UserMetricEntity, options),
+        hooks.presentEntity(UserMetricEntity, options.entities),
         hooks.responder()
       ]
     }
