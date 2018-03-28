@@ -1,5 +1,3 @@
-import { plugins } from 'mostly-feathers-mongoose';
-
 /**
  * A point metric is numerical value to measure the performance of the players
  */

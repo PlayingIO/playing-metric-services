@@ -6,7 +6,7 @@ const options = {
   timestamps: true
 };
 
-/*
+/**
  * Metrics to measure the performance of the players
  */
 const fields = {

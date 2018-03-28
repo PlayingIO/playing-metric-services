@@ -4,7 +4,7 @@ const options = {
   timestamps: true
 };
 
-/*
+/**
  * User metrics (scores/levels/achievements/etc)
  */
 const fields = {

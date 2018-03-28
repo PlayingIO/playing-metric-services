@@ -1,5 +1,3 @@
-import { plugins } from 'mostly-feathers-mongoose';
-
 /**
  * A special type of a metric who's value depends on other metrics.
  */
