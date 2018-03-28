@@ -18,11 +18,11 @@ export default function (options = {}) {
       ],
       update: [
         content.fetchBlobs({ xpath: 'image' }),
-        hooks.discardFields('id', 'createdAt', 'updatedAt', 'destroyedAt')
+        hooks.discardFields('createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
         content.fetchBlobs({ xpath: 'image' }),
-        hooks.discardFields('id', 'createdAt', 'updatedAt', 'destroyedAt')
+        hooks.discardFields('createdAt', 'updatedAt', 'destroyedAt')
       ],
       remove: []
     },
