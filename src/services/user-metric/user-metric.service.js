@@ -4,7 +4,7 @@ import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import { plural } from 'pluralize';
 
-import UserMetricModel from '~/models/user-metric.model';
+import UserMetricModel from '../../models/user-metric.model';
 import defaultHooks from './user-metric.hooks';
 import { updateUserMetricValue, updateCompoundValues } from '../../helpers';
 
@@ -14,7 +14,7 @@ const defaultOptions = {
   name: 'user-metrics'
 };
 
-class UserMetricService extends Service {
+export class UserMetricService extends Service {
   constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);

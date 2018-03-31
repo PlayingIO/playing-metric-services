@@ -3,7 +3,7 @@ import makeDebug from 'debug';
 import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 
-import CompoundModel from '~/models/compound.model';
+import CompoundModel from '../../models/compound.model';
 import defaultHooks from './compound.hooks';
 
 const debug = makeDebug('playing:metrics-services:compounds');
@@ -12,7 +12,7 @@ const defaultOptions = {
   name: 'compounds'
 };
 
-class CompoundService extends Service {
+export class CompoundService extends Service {
   constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);

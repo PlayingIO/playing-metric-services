@@ -3,7 +3,7 @@ import makeDebug from 'debug';
 import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 
-import StateModel from '~/models/state.model';
+import StateModel from '../../models/state.model';
 import defaultHooks from './state.hooks';
 
 const debug = makeDebug('playing:metrics-services:states');
@@ -12,7 +12,7 @@ const defaultOptions = {
   name: 'states'
 };
 
-class StateService extends Service {
+export class StateService extends Service {
   constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);

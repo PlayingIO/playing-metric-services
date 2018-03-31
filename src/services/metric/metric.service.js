@@ -4,7 +4,7 @@ import { Service, helpers, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import { plural } from 'pluralize';
 
-import MetricModel from '~/models/metric.model';
+import MetricModel from '../../models/metric.model';
 import defaultHooks from './metric.hooks';
 
 const debug = makeDebug('playing:metrics-services:metrics');
@@ -13,7 +13,7 @@ const defaultOptions = {
   name: 'metrics'
 };
 
-class MetricService extends Service {
+export class MetricService extends Service {
   constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
