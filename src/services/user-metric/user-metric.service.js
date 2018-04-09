@@ -48,7 +48,7 @@ export class UserMetricService extends Service {
     params = Object.assign({ query: {} }, params);
     assert(params.query.user, 'params.query.user not provided');
     params.query.metric = params.query.metric || id;
-    return this._first(null, null, params);
+    return this.first(null, null, params);
   }
 
   async create (data, params) {
@@ -69,7 +69,7 @@ export class UserMetricService extends Service {
       paginate: false
     });
     const upsertUserMetrics = fp.map(metric => {
-      return super._upsert(metric.id, metric, { query: {
+      return super.upsert(metric.id, metric, { query: {
         metric: metric.metric,
         user: data.user
       }});
