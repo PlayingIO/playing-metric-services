@@ -87,7 +87,7 @@ export class UserMetricService extends Service {
     // upsert the user metric
     const old = await getUserMetric(data.user, data.metric);
     const result = await upsertUserMetric(data.user, update);
-    result.delta = deltaUserMetric(old, result);
+    result.delta = deltaUserMetric(old, result, update);
 
     // get user metrics for updating all compound metrics
     const [userScores, compoundMetrics] = await Promise.all([
