@@ -1,3 +1,4 @@
+import assert from 'assert';
 import makeDebug from 'debug';
 import { helpers } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
@@ -65,6 +66,30 @@ export const calcUserMetricChange = (metricType, verb, value, item, chance, vari
       return value? { $set: { value } } : {}; // chance
     default:
       console.warn('calcUserMetricChange with metric type not supported', metricType.type);
+  }
+};
+
+export const deltaUserMetric = (oldMetric, newMetric) => {
+  assert(newMetric, 'newMetric is not provied');
+  assert(fp.isNil(oldMetric) || fp.idEquals(oldMetric.metric, newMetric.metric), 'Cannot delta different metric');
+  switch(newMetric.type) {
+    case 'point':
+    case 'state':
+    case 'compound':
+      return {
+        old: oldMetric && oldMetric.value,
+        new: newMetric.value
+      };
+    case 'set':
+      return fp.reduce((delta, key) => {
+        delta[key] = {
+          old: fp.path(['value', key], oldMetric || {}),
+          new: fp.path(['value', key], newMetric)
+        };
+        return delta;
+      }, {}, Object.keys(newMetric.value));
+    default:
+      console.warn('deltaUserMetric with metric type not supported', newMetric.type);
   }
 };
 
