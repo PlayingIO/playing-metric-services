@@ -7,7 +7,7 @@ import { plural } from 'pluralize';
 
 import UserMetricModel from '../../models/user-metric.model';
 import defaultHooks from './user-metric.hooks';
-import { calcUserMetricChange, updateCompoundValues } from '../../helpers';
+import { calcUserMetricChange, deltaUserMetric, updateCompoundValues } from '../../helpers';
 
 const debug = makeDebug('playing:user-metrics-services:user-metrics');
 
@@ -65,16 +65,16 @@ export class UserMetricService extends Service {
 
     const getMetric = (id) => svcMetrics.get(id);
     const getCompoundMetrics = () => svcCompounds.find({ paginate: false });
+    const getUserMetric = (user, metric) => super.first({
+      query: { user, metric }
+    });
     const getUserMetrics = (user) => super.find({
-      query: { user: data.user },
-      paginate: false
+      query: { user }, paginate: false
     });
-    const upsertUserMetrics = fp.map(metric => {
-      return super.upsert(metric.id, metric, { query: {
-        metric: metric.metric,
-        user: data.user
-      }});
-    });
+    const upsertUserMetric = (user, metric) => super.upsert(metric.id, metric,
+      { query: { user, metric: metric.metric } });
+    const upsertUserMetrics = (user, metrics) => fp.map(metric =>
+      upsertUserMetric(user, metric), metrics);
 
     const metric = await getMetric(data.metric);
     assert(metric, 'data.metric is not exists');
@@ -85,11 +85,13 @@ export class UserMetricService extends Service {
     update = fp.merge(update, fp.pick(['metric', 'user', 'name', 'type', 'meta'], data));
 
     // upsert the user metric
-    const result = await Promise.all(upsertUserMetrics([update]));
+    const old = await getUserMetric(data.user, data.metric);
+    const result = await upsertUserMetric(data.user, update);
+    result.delta = deltaUserMetric(old, result);
 
     // get user metrics for updating all compound metrics
     const [userScores, compoundMetrics] = await Promise.all([
-      getUserMetrics(),
+      getUserMetrics(data.user),
       getCompoundMetrics()
     ]);
 
@@ -105,7 +107,7 @@ export class UserMetricService extends Service {
     userCompounds = updateCompoundValues(userCompounds, userScores);
 
     if (userCompounds.length > 0) {
-      await Promise.all(upsertUserMetrics(userCompounds));
+      await Promise.all(upsertUserMetrics(data.user, userCompounds));
     }
     return result;
   }
