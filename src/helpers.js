@@ -6,6 +6,9 @@ import nerdamer from 'nerdamer';
 
 const debug = makeDebug('playing:user-metric-services:helpers');
 
+/**
+ * Evaluate metric value formula with variables
+ */
 export const evalFormulaValue = (metricType, value, variables) => {
   const result = nerdamer(value, variables).evaluate();
   switch (metricType) {
@@ -18,7 +21,9 @@ export const evalFormulaValue = (metricType, value, variables) => {
   }
 };
 
-// a simple policy to get variable output of a value at a chance
+/**
+ * A simple policy to get variable output of a value at a chance
+ */
 export const probability = (chance, value) => {
   if (chance >= 100) return value;
 
@@ -37,7 +42,9 @@ export const probability = (chance, value) => {
   }
 };
 
-// use field operator to update user's metrics value atomically
+/**
+ * Get the change of user metric with field operator for updating atomically
+ */
 export const calcUserMetricChange = (metricType, verb, value, item, chance, variables) => {
   value = evalFormulaValue(metricType, value, variables);
   value = probability(chance || 100, value);
@@ -112,6 +119,9 @@ export const updateCompoundValues = (userCompounds, userScores) => {
   });
 };
 
+/**
+ * Create user metrics defined in rewards with variables
+ */
 export const createUserMetrics = async (app, user, rewards, variables) => {
   const svcUserMetrics = app.service('user-metrics');
   const create = fp.reduce((arr, reward) => {
