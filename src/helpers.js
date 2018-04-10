@@ -37,7 +37,7 @@ export const probability = (chance, value) => {
 };
 
 // use field operator to update user's metrics value atomically
-export const updateUserMetricValue = (metricType, verb, value, item, chance, variables) => {
+export const calcUserMetricChange = (metricType, verb, value, item, chance, variables) => {
   value = evalFormulaValue(metricType, value, variables);
   value = probability(chance || 100, value);
   switch(metricType) {
@@ -48,7 +48,7 @@ export const updateUserMetricValue = (metricType, verb, value, item, chance, var
         case 'remove': return { $inc: { 'value': - value } };
         case 'set': return { $set: { 'value': value } };
         default:
-          console.warn('updateUserMetricValue with verb not supported', verb);
+          console.warn('calcUserMetricChange with verb not supported', verb);
       }
       break;
     case 'set':
@@ -58,13 +58,13 @@ export const updateUserMetricValue = (metricType, verb, value, item, chance, var
         case 'remove': return { $inc: { [`value.${item}`]: - value } };
         case 'set': return { $set: { [`value.${item}`]: value } };
         default:
-          console.warn('updateUserMetricValue with verb not supported', verb);
+          console.warn('calcUserMetricChange with verb not supported', verb);
       }
       break;
     case 'state':
       return value? { $set: { value } } : {}; // chance
     default:
-      console.warn('updateUserMetricValue with metric type not supported', metricType.type);
+      console.warn('calcUserMetricChange with metric type not supported', metricType.type);
   }
 };
 

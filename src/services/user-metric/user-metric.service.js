@@ -7,7 +7,7 @@ import { plural } from 'pluralize';
 
 import UserMetricModel from '../../models/user-metric.model';
 import defaultHooks from './user-metric.hooks';
-import { updateUserMetricValue, updateCompoundValues } from '../../helpers';
+import { calcUserMetricChange, updateCompoundValues } from '../../helpers';
 
 const debug = makeDebug('playing:user-metrics-services:user-metrics');
 
@@ -81,7 +81,7 @@ export class UserMetricService extends Service {
     if (metric.type === 'set') assert(data.item, 'data.item not provided for set metric');
 
     // value of the user metric
-    let update = updateUserMetricValue(metric.type, data.verb, data.value, data.item, data.chance, data.variables);
+    let update = calcUserMetricChange(metric.type, data.verb, data.value, data.item, data.chance, data.variables);
     update = fp.merge(update, fp.pick(['metric', 'user', 'name', 'type', 'meta'], data));
 
     // upsert the user metric
