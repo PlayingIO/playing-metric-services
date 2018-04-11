@@ -9,7 +9,7 @@ import UserMetricModel from '../../models/user-metric.model';
 import defaultHooks from './user-metric.hooks';
 import { calcUserMetricChange, deltaUserMetric, updateCompoundValues } from '../../helpers';
 
-const debug = makeDebug('playing:user-metrics-services:user-metrics');
+const debug = makeDebug('playing:metrics-services:user-metrics');
 
 const defaultOptions = {
   name: 'user-metrics'
