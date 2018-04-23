@@ -26,7 +26,7 @@ export default function (options = {}) {
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' })),
         sanitize(accepts),
-        validate(accepts),
+        validate(accepts)
       ],
       update: [
         iff(isProvider('external'),
