@@ -17,7 +17,7 @@ const defaultOptions = {
 
 export class UserMetricService extends Service {
   constructor (options) {
-    options = Object.assign({}, defaultOptions, options);
+    options = fp.assign(defaultOptions, options);
     super(options);
   }
 
@@ -107,7 +107,7 @@ export class UserMetricService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = Object.assign({ ModelName: 'user-metric' }, options);
+  options = fp.assign({ ModelName: 'user-metric' }, options);
   return createService(app, UserMetricService, UserMetricModel, options);
 }
 

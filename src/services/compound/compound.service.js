@@ -14,7 +14,7 @@ const defaultOptions = {
 
 export class CompoundService extends Service {
   constructor (options) {
-    options = Object.assign({}, defaultOptions, options);
+    options = fp.assign(defaultOptions, options);
     super(options);
   }
 
@@ -25,7 +25,7 @@ export class CompoundService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = Object.assign({ ModelName: 'compound' }, options);
+  options = fp.assign({ ModelName: 'compound' }, options);
   return createService(app, CompoundService, CompoundModel, options);
 }
 
