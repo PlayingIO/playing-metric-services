@@ -1,6 +1,5 @@
 import assert from 'assert';
 import makeDebug from 'debug';
-import { idAction } from 'mostly-feathers';
 import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import { plural } from 'pluralize';
@@ -40,10 +39,8 @@ export class UserMetricService extends Service {
    * get user metrics by action id
    */
   async get (id, params) {
-    let action = null;
-    [id, action] = idAction(id, params);
-    if (action) {
-      return super._action('get', action, id, null, params);
+    if (this._isAction(id, params)) {
+      return super._action('get', id, null, params);
     }
 
     params = fp.assign({ query: {} }, params);
