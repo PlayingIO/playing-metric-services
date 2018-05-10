@@ -49,7 +49,7 @@ export class UserMetricService extends Service {
     params = Object.assign({ query: {} }, params);
     assert(params.query.user, 'params.query.user not provided');
     params.query.metric = params.query.metric || id;
-    return this.first(null, null, params);
+    return this.first(params);
   }
 
   async create (data, params) {
