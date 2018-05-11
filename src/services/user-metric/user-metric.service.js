@@ -30,7 +30,7 @@ export class UserMetricService extends Service {
    * @param {*} params
    */
   async find (params) {
-    params = fp.assign({ query: {} }, params);
+    params = { query: {}, ...params };
     assert(params.query.user, 'params.query.user not provided');
     return super.find(params);
   }
@@ -43,7 +43,7 @@ export class UserMetricService extends Service {
       return super._action('get', id, null, params);
     }
 
-    params = fp.assign({ query: {} }, params);
+    params = { query: {}, ...params };
     assert(params.query.user, 'params.query.user not provided');
     params.query.metric = params.query.metric || id;
     return this.first(params);
