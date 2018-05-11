@@ -88,7 +88,7 @@ export class MetricService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'metric' }, options);
+  options = { ModelName: 'metric', ...options };
   return createService(app, MetricService, MetricModel, options);
 }
 

@@ -25,7 +25,7 @@ export class SetService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'set' }, options);
+  options = { ModelName: 'set', ...options };
   return createService(app, SetService, SetModel, options);
 }
 

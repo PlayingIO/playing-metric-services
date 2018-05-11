@@ -104,7 +104,7 @@ export class UserMetricService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'user-metric' }, options);
+  options = { ModelName: 'user-metric', ...options };
   return createService(app, UserMetricService, UserMetricModel, options);
 }
 

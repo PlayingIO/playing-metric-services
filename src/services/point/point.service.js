@@ -25,7 +25,7 @@ export class PointService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'point' }, options);
+  options = { ModelName: 'point', ...options };
   return createService(app, PointService, PointModel, options);
 }
 

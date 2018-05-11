@@ -25,7 +25,7 @@ export class CompoundService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'compound' }, options);
+  options = { ModelName: 'compound', ...options };
   return createService(app, CompoundService, CompoundModel, options);
 }
 

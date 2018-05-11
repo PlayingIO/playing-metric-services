@@ -25,7 +25,7 @@ export class StateService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'state' }, options);
+  options = { ModelName: 'state', ...options };
   return createService(app, StateService, StateModel, options);
 }
 
