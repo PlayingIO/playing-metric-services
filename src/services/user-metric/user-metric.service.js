@@ -36,7 +36,7 @@ export class UserMetricService extends Service {
   }
 
   /**
-   * get user metrics by action id
+   * get user metrics by metric id
    */
   async get (id, params) {
     if (this._isAction(id, params)) {
