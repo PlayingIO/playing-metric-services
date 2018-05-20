@@ -16,12 +16,6 @@ export default function (options = {}) {
           queryWithCurrentUser({ idField: 'id', as: 'user' })),
         cache(options.cache)
       ],
-      find: [
-        hooks.prefixSelect('workout', { excepts: ['games', 'insights']})
-      ],
-      get: [
-        hooks.prefixSelect('workout', { excepts: ['games', 'insights']})
-      ],
       create: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' })),
