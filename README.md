@@ -1,7 +1,7 @@
-Playing Game Metric Services
-============================
+Playing Game Metrics Services
+=============================
 
-Game metric management microservices for playful applications.
+Game metrics management microservices for playful applications.
 
 # Usage
 
