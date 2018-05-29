@@ -3,23 +3,9 @@ import makeDebug from 'debug';
 import { helpers } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import nerdamer from 'nerdamer';
+import { evalFormulaValue } from 'playing-metric-common';
 
 const debug = makeDebug('playing:user-metric-services:helpers');
-
-/**
- * Evaluate metric value formula with variables
- */
-export const evalFormulaValue = (metricType, value, variables) => {
-  const result = nerdamer(value, variables).evaluate();
-  switch (metricType) {
-    case 'point':
-    case 'set':
-    case 'compound':
-      return parseInt(result.text());
-    default:
-      return result.text();
-  }
-};
 
 /**
  * A simple policy to get variable output of a value at a chance
@@ -117,22 +103,4 @@ export const updateCompoundValues = (userCompounds, userScores) => {
     metric.value = evalFormulaValue(metric, metric.formula, variables);
     return metric;
   });
-};
-
-/**
- * Create user metrics defined in rewards with variables
- */
-export const createUserMetrics = async (app, user, rewards, variables) => {
-  const svcUserMetrics = app.service('user-metrics');
-  const create = fp.reduce((arr, reward) => {
-    if (reward.metric) {
-      reward.metric = helpers.getId(reward.metric);
-      reward.user = user;
-      reward.variables = variables;
-      return arr.concat(svcUserMetrics.create(reward));
-    }
-    return arr;
-  }, []);
-  const metrics = await Promise.all(create(rewards));
-  return fp.flatten(metrics);
 };
