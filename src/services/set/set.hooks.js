@@ -1,6 +1,6 @@
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
-import { hooks as content } from 'playing-content-services';
+import contents from 'playing-content-common';
 
 import SetEntity from '../../entities/set.entity';
 
@@ -14,14 +14,14 @@ export default function (options = {}) {
       get: [],
       find: [],
       create: [
-        content.fetchBlobs({ xpath: 'image' })
+        contents.fetchBlobs({ xpath: 'image' })
       ],
       update: [
-        content.fetchBlobs({ xpath: 'image' }),
+        contents.fetchBlobs({ xpath: 'image' }),
         hooks.discardFields('createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
-        content.fetchBlobs({ xpath: 'image' }),
+        contents.fetchBlobs({ xpath: 'image' }),
         hooks.discardFields('createdAt', 'updatedAt', 'destroyedAt')
       ],
       remove: []

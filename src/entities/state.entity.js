@@ -1,9 +1,9 @@
 import Entity from 'mostly-entity';
-import { entities as contents } from 'playing-content-services';
+import { BlobEntity } from 'playing-content-common';
 
 const StateEntity = new Entity('State', {
-  image: { using: contents.BlobEntity },
-  'constraints.states.image': { using: contents.BlobEntity }
+  image: { using: BlobEntity },
+  'constraints.states.image': { using: BlobEntity }
 });
 
 StateEntity.excepts('updatedAt', 'destroyedAt');
