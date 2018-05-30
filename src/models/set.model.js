@@ -1,4 +1,4 @@
-import { models as contents } from 'playing-content-services';
+import { schemas as contents } from 'playing-content-common';
 
 /**
  * A set metric is a group of unordered items.

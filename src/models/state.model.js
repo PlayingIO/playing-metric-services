@@ -1,4 +1,4 @@
-import { models as contents } from 'playing-content-services';
+import { schemas as contents } from 'playing-content-common';
 
 /**
  * A state metric indicates a particular state which the player is currently in.
