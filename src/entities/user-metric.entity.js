@@ -2,6 +2,6 @@ import Entity from 'mostly-entity';
 
 const UserMetricEntity = new Entity('UserMetric');
 
-UserMetricEntity.excepts('updatedAt', 'destroyedAt');
+UserMetricEntity.excepts('_id');
 
 export default UserMetricEntity.asImmutable();

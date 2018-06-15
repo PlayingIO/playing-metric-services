@@ -6,6 +6,6 @@ const SetEntity = new Entity('Set', {
   'constraints.items.image': { using: BlobEntity }
 });
 
-SetEntity.excepts('updatedAt', 'destroyedAt');
+SetEntity.excepts('_id');
 
 export default SetEntity.asImmutable();

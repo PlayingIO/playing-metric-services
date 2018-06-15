@@ -5,6 +5,6 @@ const CompoundEntity = new Entity('Compound', {
   image: { using: BlobEntity }
 });
 
-CompoundEntity.excepts('updatedAt', 'destroyedAt');
+CompoundEntity.excepts('_id');
 
 export default CompoundEntity.asImmutable();

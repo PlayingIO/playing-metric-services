@@ -6,6 +6,6 @@ const StateEntity = new Entity('State', {
   'constraints.states.image': { using: BlobEntity }
 });
 
-StateEntity.excepts('updatedAt', 'destroyedAt');
+StateEntity.excepts('_id');
 
 export default StateEntity.asImmutable();

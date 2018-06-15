@@ -5,6 +5,6 @@ const MetricEntity = new Entity('Metric', {
   image: { using: BlobEntity }
 });
 
-MetricEntity.excepts('updatedAt', 'destroyedAt');
+MetricEntity.excepts('_id');
 
 export default MetricEntity.asImmutable();

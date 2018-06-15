@@ -5,6 +5,6 @@ const PointEntity = new Entity('Point', {
   image: { using: BlobEntity }
 });
 
-PointEntity.excepts('updatedAt', 'destroyedAt');
+PointEntity.excepts('_id');
 
 export default PointEntity.asImmutable();
