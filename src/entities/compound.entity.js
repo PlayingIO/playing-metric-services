@@ -5,6 +5,6 @@ const CompoundEntity = new Entity('Compound', {
   image: { using: BlobEntity }
 });
 
-CompoundEntity.excepts('_id');
+CompoundEntity.discard('_id');
 
 export default CompoundEntity.asImmutable();
