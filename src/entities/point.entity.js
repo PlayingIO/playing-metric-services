@@ -7,4 +7,4 @@ const PointEntity = new Entity('Point', {
 
 PointEntity.discard('_id');
 
-export default PointEntity.asImmutable();
+export default PointEntity.freeze();

@@ -8,4 +8,4 @@ const SetEntity = new Entity('Set', {
 
 SetEntity.discard('_id');
 
-export default SetEntity.asImmutable();
+export default SetEntity.freeze();

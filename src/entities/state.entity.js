@@ -8,4 +8,4 @@ const StateEntity = new Entity('State', {
 
 StateEntity.discard('_id');
 
-export default StateEntity.asImmutable();
+export default StateEntity.freeze();

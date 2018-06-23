@@ -7,4 +7,4 @@ const MetricEntity = new Entity('Metric', {
 
 MetricEntity.discard('_id');
 
-export default MetricEntity.asImmutable();
+export default MetricEntity.freeze();

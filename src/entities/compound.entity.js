@@ -7,4 +7,4 @@ const CompoundEntity = new Entity('Compound', {
 
 CompoundEntity.discard('_id');
 
-export default CompoundEntity.asImmutable();
+export default CompoundEntity.freeze();
