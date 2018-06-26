@@ -39,10 +39,6 @@ export class UserMetricService extends Service {
    * get user metrics by metric id
    */
   async get (id, params) {
-    if (this._isAction(id, params)) {
-      return super._action('get', id, null, params);
-    }
-
     params = { query: {}, ...params };
     assert(params.query.user, 'params.query.user not provided');
     params.query.metric = params.query.metric || id;
