@@ -31,7 +31,7 @@ export class UserMetricService extends Service {
    */
   async find (params) {
     params = { query: {}, ...params };
-    assert(params.query.user, 'params.query.user not provided');
+    assert(params.query.user, 'query.user not provided');
     return super.find(params);
   }
 
@@ -40,7 +40,7 @@ export class UserMetricService extends Service {
    */
   async get (id, params) {
     params = { query: {}, ...params };
-    assert(params.query.user, 'params.query.user not provided');
+    assert(params.query.user, 'query.user not provided');
     params.query.metric = params.query.metric || id;
     return this.first(params);
   }
@@ -63,8 +63,8 @@ export class UserMetricService extends Service {
       upsertUserMetric(user, metric), metrics);
 
     const metric = await getMetric(data.metric);
-    assert(metric, 'data.metric is not exists');
-    if (metric.type === 'set') assert(data.item, 'data.item not provided for set metric');
+    assert(metric, 'metric is not exists');
+    if (metric.type === 'set') assert(data.item, 'item not provided for set metric');
 
     // value of the user metric
     let update = calcUserMetricChange(metric.type, data.verb, data.value, data.item, data.chance, data.variables);
