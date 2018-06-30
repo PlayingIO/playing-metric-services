@@ -1,4 +1,4 @@
-import { iff, isProvider } from 'feathers-hooks-common';
+import { iff } from 'feathers-hooks-common';
 import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
 import { hooks } from 'mostly-feathers-mongoose';
 import { cache } from 'mostly-feathers-cache';
@@ -12,24 +12,20 @@ export default function (options = {}) {
     before: {
       all: [
         hooks.authenticate('jwt', options.auth),
-        iff(isProvider('external'),
-          queryWithCurrentUser({ idField: 'id', as: 'user' })),
+        queryWithCurrentUser({ idField: 'id', as: 'user' }),
         cache(options.cache)
       ],
       create: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'user' })),
+        associateCurrentUser({ idField: 'id', as: 'user' }),
         sanitize(accepts),
         validate(accepts)
       ],
       update: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'user' })),
+        associateCurrentUser({ idField: 'id', as: 'user' }),
         hooks.discardFields('createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'user' })),
+        associateCurrentUser({ idField: 'id', as: 'user' }),
         hooks.discardFields('createdAt', 'updatedAt', 'destroyedAt')
       ]
     },
