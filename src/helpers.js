@@ -1,16 +1,16 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import { helpers } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
-import nerdamer from 'nerdamer';
-import { evalFormulaValue } from 'playing-metric-common';
+const assert = require('assert');
+const makeDebug = require('debug');
+const { helpers } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
+const nerdamer = require('nerdamer');
+const { evalFormulaValue } = require('playing-metric-common');
 
 const debug = makeDebug('playing:user-metric-services:helpers');
 
 /**
  * A simple policy to get variable output of a value at a chance
  */
-export const probability = (chance, value) => {
+const probability = (chance, value) => {
   if (chance >= 100) return value;
 
   const random = Math.random();
@@ -31,7 +31,7 @@ export const probability = (chance, value) => {
 /**
  * Get the change of user metric with field operator for updating atomically
  */
-export const calcUserMetricChange = (metricType, verb, value, item, chance, variables) => {
+const calcUserMetricChange = (metricType, verb, value, item, chance, variables) => {
   value = evalFormulaValue(metricType, value, variables);
   value = probability(chance || 100, value);
   switch(metricType) {
@@ -65,7 +65,7 @@ export const calcUserMetricChange = (metricType, verb, value, item, chance, vari
 /**
  * caculate the old/new delta value of user metric, considering optional update op
  */
-export const deltaUserMetric = (oldMetric, newMetric, update) => {
+const deltaUserMetric = (oldMetric, newMetric, update) => {
   assert(newMetric, 'newMetric is not provied');
   assert(fp.isNil(oldMetric) || fp.idEquals(oldMetric.metric, newMetric.metric), 'Cannot delta different metric');
   switch(newMetric.type) {
@@ -90,7 +90,7 @@ export const deltaUserMetric = (oldMetric, newMetric, update) => {
   }
 };
 
-export const updateCompoundValues = (userCompounds, userScores) => {
+const updateCompoundValues = (userCompounds, userScores) => {
   const variables = fp.reduce((acc, score) => {
     if (score.type === 'set') {
       return fp.reduce((acc2, key) =>
@@ -103,4 +103,11 @@ export const updateCompoundValues = (userCompounds, userScores) => {
     metric.value = evalFormulaValue(metric, metric.formula, variables);
     return metric;
   });
+};
+
+module.exports = {
+  calcUserMetricChange,
+  deltaUserMetric,
+  probability,
+  updateCompoundValues
 };
