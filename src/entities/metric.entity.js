@@ -1,5 +1,5 @@
-import Entity from 'mostly-entity';
-import { BlobEntity } from 'playing-content-common';
+const Entity = require('mostly-entity');
+const { BlobEntity } = require('playing-content-common');
 
 const MetricEntity = new Entity('Metric', {
   image: { using: BlobEntity }
@@ -7,4 +7,4 @@ const MetricEntity = new Entity('Metric', {
 
 MetricEntity.discard('_id');
 
-export default MetricEntity.freeze();
+module.exports = MetricEntity.freeze();

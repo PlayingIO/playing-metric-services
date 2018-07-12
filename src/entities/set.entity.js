@@ -1,5 +1,5 @@
-import Entity from 'mostly-entity';
-import { BlobEntity } from 'playing-content-common';
+const Entity = require('mostly-entity');
+const { BlobEntity } = require('playing-content-common');
 
 const SetEntity = new Entity('Set', {
   image: { using: BlobEntity },
@@ -8,4 +8,4 @@ const SetEntity = new Entity('Set', {
 
 SetEntity.discard('_id');
 
-export default SetEntity.freeze();
+module.exports = SetEntity.freeze();

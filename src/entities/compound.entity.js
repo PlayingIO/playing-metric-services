@@ -1,5 +1,5 @@
-import Entity from 'mostly-entity';
-import { BlobEntity } from 'playing-content-common';
+const Entity = require('mostly-entity');
+const { BlobEntity } = require('playing-content-common');
 
 const CompoundEntity = new Entity('Compound', {
   image: { using: BlobEntity }
@@ -7,4 +7,4 @@ const CompoundEntity = new Entity('Compound', {
 
 CompoundEntity.discard('_id');
 
-export default CompoundEntity.freeze();
+module.exports = CompoundEntity.freeze();

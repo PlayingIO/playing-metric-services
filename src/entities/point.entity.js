@@ -1,5 +1,5 @@
-import Entity from 'mostly-entity';
-import { BlobEntity } from 'playing-content-common';
+const Entity = require('mostly-entity');
+const { BlobEntity } = require('playing-content-common');
 
 const PointEntity = new Entity('Point', {
   image: { using: BlobEntity }
@@ -7,4 +7,4 @@ const PointEntity = new Entity('Point', {
 
 PointEntity.discard('_id');
 
-export default PointEntity.freeze();
+module.exports = PointEntity.freeze();
