@@ -1,12 +1,12 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import { Service, createService } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
-import { plural } from 'pluralize';
+const assert = require('assert');
+const makeDebug = require('debug');
+const { Service, createService } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
+const { plural } = require('pluralize');
 
-import UserMetricModel from '../../models/user-metric.model';
-import defaultHooks from './user-metric.hooks';
-import { calcUserMetricChange, deltaUserMetric, updateCompoundValues } from '../../helpers';
+const UserMetricModel = require('../../models/user-metric.model');
+const defaultHooks = require('./user-metric.hooks');
+const { calcUserMetricChange, deltaUserMetric, updateCompoundValues } = require('../../helpers');
 
 const debug = makeDebug('playing:metrics-services:user-metrics');
 
@@ -14,7 +14,7 @@ const defaultOptions = {
   name: 'user-metrics'
 };
 
-export class UserMetricService extends Service {
+class UserMetricService extends Service {
   constructor (options) {
     options = fp.assignAll(defaultOptions, options);
     super(options);
@@ -99,9 +99,8 @@ export class UserMetricService extends Service {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   options = { ModelName: 'user-metric', ...options };
   return createService(app, UserMetricService, UserMetricModel, options);
-}
-
-init.Service = UserMetricService;
+};
+module.exports.Service = UserMetricService;

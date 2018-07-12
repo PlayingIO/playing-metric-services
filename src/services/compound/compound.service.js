@@ -1,10 +1,10 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import { Service, createService } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
+const assert = require('assert');
+const makeDebug = require('debug');
+const { Service, createService } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
 
-import CompoundModel from '../../models/compound.model';
-import defaultHooks from './compound.hooks';
+const CompoundModel = require('../../models/compound.model');
+const defaultHooks = require('./compound.hooks');
 
 const debug = makeDebug('playing:metrics-services:compounds');
 
@@ -12,7 +12,7 @@ const defaultOptions = {
   name: 'compounds'
 };
 
-export class CompoundService extends Service {
+class CompoundService extends Service {
   constructor (options) {
     options = fp.assignAll(defaultOptions, options);
     super(options);
@@ -24,9 +24,8 @@ export class CompoundService extends Service {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   options = { ModelName: 'compound', ...options };
   return createService(app, CompoundService, CompoundModel, options);
-}
-
-init.Service = CompoundService;
+};
+module.exports.Service = CompoundService;

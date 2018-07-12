@@ -1,11 +1,11 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import { Service, helpers, createService } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
-import { plural } from 'pluralize';
+const assert = require('assert');
+const makeDebug = require('debug');
+const { Service, helpers, createService } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
+const { plural } = require('pluralize');
 
-import MetricModel from '../../models/metric.model';
-import defaultHooks from './metric.hooks';
+const MetricModel = require('../../models/metric.model');
+const defaultHooks = require('./metric.hooks');
 
 const debug = makeDebug('playing:metrics-services:metrics');
 
@@ -13,7 +13,7 @@ const defaultOptions = {
   name: 'metrics'
 };
 
-export class MetricService extends Service {
+class MetricService extends Service {
   constructor (options) {
     options = fp.assignAll(defaultOptions, options);
     super(options);
@@ -87,9 +87,8 @@ export class MetricService extends Service {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   options = { ModelName: 'metric', ...options };
   return createService(app, MetricService, MetricModel, options);
-}
-
-init.Service = MetricService;
+};
+module.exports.Service = MetricService;
