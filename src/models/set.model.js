@@ -1,4 +1,4 @@
-import { schemas as contents } from 'playing-content-common';
+const { schemas: contents } = require('playing-content-common');
 
 /**
  * A set metric is a group of unordered items.
@@ -16,11 +16,10 @@ const fields = {
   }
 };
 
-export default function model (app, name) {
+module.exports = function model (app, name) {
   const mongoose = app.get('mongoose');
   const MetricModel = mongoose.model('metric');
   const schema = new mongoose.Schema(fields);
   return MetricModel.discriminator(name, schema);
-}
-
-model.schema = fields;
+};
+module.exports.schema = fields;

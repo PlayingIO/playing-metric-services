@@ -1,4 +1,4 @@
-import { plugins } from 'mostly-feathers-mongoose';
+const { plugins } = require('mostly-feathers-mongoose');
 
 const options = {
   timestamps: true
@@ -16,12 +16,11 @@ const fields = {
   user: { type: 'ObjectId', required: true }    // user id
 };
 
-export default function model (app, name) {
+module.exports = function model (app, name) {
   const mongoose = app.get('mongoose');
   const schema = new mongoose.Schema(fields, options);
   schema.plugin(plugins.trashable);
   schema.index({ metric: 1, user: 1 }, { unique: true });
   return mongoose.model(name, schema);
-}
-
-model.schema = fields;
+};
+module.exports.schema = fields;
